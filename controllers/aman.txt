@@ -1,0 +1,101 @@
+hey i am aman 
+db.productlists.insertOne({p_name:"mongosh",p_price:1000}) //insert in collection
+
+db.productlists.find() //find all docs
+
+
+db.productlists.updateOne({p_name:"mongosh"},{$set:{p_name:"updated mongosh"}}) 
+// find particular doc and update the values
+
+
+
+db.productlists.deleteOne({p_name:"mongosh"})
+//delete according to condition
+
+
+
+
+db.productlists.aggregate( [
+ {
+      $match: { p_name:"prod" }
+   }
+] )//  Filter order documents by prod name
+
+
+
+
+
+db.productlists.aggregate( [
+{
+      $group: { _id: "$p_name", totalQuantity: { $sum: 1 } }
+   }
+] ) //Group remaining documents by prod name and calculate total quantity
+
+
+
+db.productlists.aggregate([
+  {
+    $group: { _id: "$p_name", totalcost: { $sum: "$p_price" } }
+  }
+]) 
+//aggregate by name and show total price of particular total productlists
+
+
+
+db.productlists.aggregate([
+  {
+    $project: {
+      "p_name": 1,
+     
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+//This aggregation stage passes only the specified fields along to the next aggregation stage.
+
+
+
+db.productlists.aggregate([ 
+  { 
+    $sort: { "p_price": -1 } 
+  },
+  {
+    $limit: 5
+  }
+])
+//sort according to product price in descending order
+
+
+
+
+db.productlists.aggregate([
+  {
+    $addFields: {
+      avgprice: { $avg: [ "$discount", "$p_price" ]}
+    }
+  }
+])
+//add a field
+//also avg is used to get average
+
+
+
+db.productlists.aggregate([
+  {
+    $lookup: {
+      from: "vendorlists",
+      localField: "p_name",
+      foreignField: "p_name",
+      as: "prod name left join",
+    },
+  },
+  {
+    $limit: 1
+  }
+])
+//joins in mongodb
+
+
+
